@@ -21,7 +21,7 @@ void execute_command(char *command)
 
 	if (child_pid == 0)
 	{
-		args[0] = command;
+		args[0] = *parse_Arg(command);
 		args[1] = NULL;
 
 		execve(args[0], args, NULL);

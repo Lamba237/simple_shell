@@ -1,13 +1,14 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#include <string.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <sys/types.h>
 
-char **arguments(const char *command);
+char **parse_Arg(char *command);
 size_t custom_strlen(const char *str);
 void remove_newline(char *str);
 int _putchar(char c);
