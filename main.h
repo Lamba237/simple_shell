@@ -7,13 +7,18 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 
+int start_with_slash(const char *ptr);
+char *get_file_path(char *name_file);
+/*char *Strcat(char *dest, char *source)*/
+char *get_file(char *path, char *file_name);
+char *_strcpy(char *dest, char *source);
 char **parse_Arg(char *command);
 size_t custom_strlen(const char *str);
 void remove_newline(char *str);
 int _putchar(char c);
 char *_strdup(const char *str);
 void print_string(const char *str);
-void execute_command(char *command);
 
 #endif /* MAIN_H */
