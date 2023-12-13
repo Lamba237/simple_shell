@@ -5,20 +5,39 @@
  * @command : passing pointer into our function
  * Return: void
  */
+
+
 void execute_command(char *command)
 {
-	pid_t pid, wpid;
+	pid_t pid;
 	int status;
+	size_t i;
+
+	/* Split the command into arguments*/
+	char *token = strtok(command, " \t\n");
+	char *args[MAX_ARGS + 1];  /* Additional slot for NULL terminator*/
+	size_t arg_count = 0;
+
+	while (token && arg_count < MAX_ARGS)
+	{
+		args[arg_count++] = strdup(token);
+		token = strtok(NULL, " \t\n");
+	}
+	args[arg_count] = NULL;
 
 	pid = fork();
 
 	if (pid == -1)
 	{
 		perror("fork");
-	} else if (pid == 0)
+		exit(EXIT_FAILURE);
+	}
+
+	if (pid == 0)
 	{
 		/* Child process*/
-		if (execve(command, NULL, NULL) == -1)
+
+		if (execve(args[0], args, NULL) == -1)
 		{
 			perror("execve");
 			_exit(EXIT_FAILURE);
@@ -26,11 +45,12 @@ void execute_command(char *command)
 	} else
 	{
 		/* Parent process*/
-		do
-
-		{
-			wpid = waitpid(pid, &status, WUNTRACED);
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+		waitpid(pid, &status, 0);
+	}
+	/* Free the dynamically allocated memory for arguments*/
+	for (i = 0; i < arg_count; ++i)
+	{
+		free(args[i]);
 	}
 }
 
@@ -42,14 +62,15 @@ void execute_command(char *command)
 int main(void)
 {
 	char command[MAX_INPUT_SIZE];
+	ssize_t nread;
 
 	while (1)
 	{
 		display_prompt();
 
-		ssize_t nread = read(STDIN_FILENO, command, MAX_INPUT_SIZE);
+		nread = read(STDIN_FILENO, command, MAX_INPUT_SIZE);
 
-		if (nread == -1)
+		if (nread == 0)
 		{
 			/* Handle end-of-file condition (Ctrl+D)*/
 			handle_eof();
