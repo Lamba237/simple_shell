@@ -8,14 +8,15 @@
  */
 char *Strcat(const char *dest, const char *src)
 {
-	size_t dest_len = strlen(dest);
-	size_t src_len = strlen(src);
-	char *result = (char *)malloc(dest_len + src_len + 1);
+	size_t dest_len = custom_strlen(dest);
+	size_t src_len = custom_strlen(src);
+	char *result;
 
 	if (dest == NULL || src == NULL)
 	{
 		return NULL;
 	}
+	result = (char *)malloc(dest_len + src_len + 1);
 	if (result == NULL)
 	{
 		return NULL;

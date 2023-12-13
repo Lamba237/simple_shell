@@ -11,58 +11,56 @@ int main(void)
 	ssize_t nread;
 	size_t count;
 	pid_t child_pid;
-	int status, i = 0;
+	int status, i;
 	char **Args;
 
 	while (1)
 	{
-		print_string("Cisfun$ ");
+		if (isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, "#Cisfun", 9);
+
 		nread = getline(&lineptr, &count, stdin);
 		remove_newline(lineptr);
 		if (nread == -1)
 		{
-			perror("Error");
 			exit(0);
 		}
 		token = strtok(lineptr, " \n\t");
 		Args = malloc(sizeof(char *) * 1024);
+
+		i = 0;
 		while (token)
 		{
 			Args[i] = token;
-			token = strtok(NULL, " \n\t");
+			token = strtok(NULL, " \n");
 			i++;
 		}
 		Args[i] = NULL;
 		path = get_file_path(Args[0]); /* get the absolute path */
-		if (path == NULL)
-		{
-			free(Args);
-			continue;
-		}
+
 		child_pid = fork();
 
 		if (child_pid == -1)
 		{
 			perror("Fork error");
-			exit(EXIT_FAILURE);
+			exit(41);
 		}
 
 		if (child_pid == 0)
 		{
-			if (execve(path, Args, NULL))
+			if (execve(path, Args, NULL) == -1)
 			{
 				/* If execve fails, print an error and exit */
 				perror("./shell");
-				exit(EXIT_FAILURE);
+				exit(97);
 			}
 		}
 		else
 		{
-			waitpid(child_pid, &status, 0);
+			wait(&status);
 		}
-		free(path);
-		free(Args);
 	}
+	free(path);
 	free(lineptr);
 	return (0);
 }
