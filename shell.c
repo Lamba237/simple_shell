@@ -24,6 +24,10 @@ int main(void)
 			perror("Error");
 			exit(EXIT_FAILURE);
 		}
+		if (lineptr[nread - 1] == '\n')
+		{
+			lineptr[nread - 1] = '\0';
+		}
 		token = strtok(lineptr, " \n\t");
 		args = malloc(sizeof(char *) * 64);
 		i = 0;
@@ -54,6 +58,7 @@ int main(void)
 		{
 			wait(&status);
 		}
+		free(args);
 	}
 	/* freeing all alocated buffers */
 	free(lineptr);
