@@ -5,19 +5,18 @@
  * @source: source string
  * Return: destination string
  */
-char *_strcpy(char *dest, char *source)
+char *_strcpy(char *dest, const char *source)
 {
+	char *OriginalDest = dest;
+
 	if (!dest || !source)
 	{
 		return (NULL);
 	}
-	while (source)
+	while ((*dest++ = *source++) != '\0')
 	{
-		dest = source;
-		++dest;
-		++source;
+		/* copy characters until null terminator is encountered */
 	}
-	dest = '\0';
 
-	return (dest);
+	return (OriginalDest);
 }

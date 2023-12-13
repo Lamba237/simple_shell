@@ -30,9 +30,8 @@ char *get_file(char *path, char *file_name)
 			exit(EXIT_FAILURE);
 		}
 		_strcpy(copy_path, token);
-		strcat(path_buf, "/");
-		strcat(path_buf, file_name);
-		strcat(path_buf, "\0");
+		Strcat(path_buf, "/");
+		Strcat(path_buf, file_name);
 		if (stat(path_buf, &file_path) == 0 && access(path_buf, X_OK) == 0)
 		{
 			free(copy_path);
@@ -41,7 +40,5 @@ char *get_file(char *path, char *file_name)
 		token = strtok(NULL, ":");
 	}
 	free(copy_path);
-	if (path_buf)
-	free(path_buf);
 	return (NULL);
 }

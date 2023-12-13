@@ -34,7 +34,11 @@ int main(void)
 		}
 		Args[i] = NULL;
 		path = get_file_path(Args[0]); /* get the absolute path */
-
+		if (path == NULL)
+		{
+			free(Args);
+			continue;
+		}
 		child_pid = fork();
 
 		if (child_pid == -1)
@@ -56,8 +60,9 @@ int main(void)
 		{
 			waitpid(child_pid, &status, 0);
 		}
+		free(path);
+		free(Args);
 	}
-	free(path);
 	free(lineptr);
 	return (0);
 }

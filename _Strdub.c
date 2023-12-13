@@ -26,5 +26,7 @@ char *_strdup(const char *str)
 	for (i = 0; i <= len; i++)
 		dup_str[i] = str[i];
 
+	free(dup_str);
+
 	return (dup_str);
 }
