@@ -20,16 +20,16 @@ int main(void)
 	{
 		write(STDOUT_FILENO, ":) ", 3);
 		nread = getline(&lineptr, &size, stdin);
-		if (nread == EOF)
+		if (nread == -1)
 		{
-			return (1);
+			exit(0);
 		}
 		if (lineptr[nread - 1] == '\n')
 		{
 			lineptr[nread - 1] = '\0';
 		}
 		token = strtok(lineptr, " \n\t");
-		args = malloc(sizeof(char *) * 64);
+		args = malloc(sizeof(char *) * 1024);
 		i = 0;
 
 		while (token)
@@ -41,27 +41,33 @@ int main(void)
 		args[i] = NULL;
 		path = get_file_path(args[0]);
 
-			pid = fork();
+		if (path == NULL)
+		{
+			continue;
+		}
 
-			if (pid == -1)
+		pid = fork();
+
+		if (pid == -1)
+		{
+			perror("Error");
+			exit(EXIT_FAILURE);
+		}
+		if (pid == 0)
+		{
+			if (execve(path, args, NULL) == -1)
 			{
-				perror("Error");
+				perror("./shell");
 				exit(EXIT_FAILURE);
 			}
-			if (pid == 0)
-			{
-				if (execve(path, args, NULL) == -1)
-				{
-					perror("./shell");
-					exit(EXIT_FAILURE);
-				}
-			}
-			else
-			{
-				wait(&status);
-			}
+		}
+		else
+		{
+			wait(&status);
+		}
 	}
 	free(path);
+
 	free(lineptr);
 
 	return (0); /* represents succeess */
