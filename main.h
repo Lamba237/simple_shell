@@ -13,10 +13,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-
-void display_prompt(void);
-void handle_eof(void);
-void execute_command(char *command);
-
+int startsWithForwardSlash(const char *str);
+char *get_file_loc(char *path, char *file_name);
+char *get_file_path(char *file_name);
+/* custom function */
+char *_strcat(char *str, char *ptr);
+char *_strdup(char *ptr);
+size_t _strlen(char *ptr);
 
 #endif /* MAIN_H */

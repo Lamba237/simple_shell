@@ -8,6 +8,7 @@
  */
 int main(void)
 {
+	char *path;
 	pid_t pid;
 	int status, i;
 	char **args;
@@ -19,10 +20,9 @@ int main(void)
 	{
 		write(STDOUT_FILENO, ":) ", 3);
 		nread = getline(&lineptr, &size, stdin);
-		if (nread == -1)
+		if (nread == EOF)
 		{
-			perror("Error");
-			exit(EXIT_FAILURE);
+			return (1);
 		}
 		if (lineptr[nread - 1] == '\n')
 		{
@@ -39,28 +39,29 @@ int main(void)
 			i++;
 		}
 		args[i] = NULL;
-		pid = fork();
+		path = get_file_path(args[0]);
 
-		if (pid == -1)
-		{
-			perror("Error");
-			exit(EXIT_FAILURE);
-		}
-		if (pid == 0)
-		{
-			if (execve(args[0], args, NULL) == -1)
+			pid = fork();
+
+			if (pid == -1)
 			{
-				perror("./shell");
+				perror("Error");
 				exit(EXIT_FAILURE);
 			}
-		}
-		else
-		{
-			wait(&status);
-		}
-		free(args);
+			if (pid == 0)
+			{
+				if (execve(path, args, NULL) == -1)
+				{
+					perror("./shell");
+					exit(EXIT_FAILURE);
+				}
+			}
+			else
+			{
+				wait(&status);
+			}
 	}
-	/* freeing all alocated buffers */
+	free(path);
 	free(lineptr);
 
 	return (0); /* represents succeess */
