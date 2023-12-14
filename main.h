@@ -13,6 +13,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+int _strcmp(const char *ptr, const char *str);
+int exit_built(const char *args, int argc);
 int startsWithForwardSlash(const char *str);
 char *get_file_loc(char *path, char *file_name);
 char *get_file_path(char *file_name);
