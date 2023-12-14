@@ -17,6 +17,7 @@ int startsWithForwardSlash(const char *str);
 char *get_file_loc(char *path, char *file_name);
 char *get_file_path(char *file_name);
 /* custom function */
+char *_strcpy(char *dest, char *source);
 char *_strcat(char *str, char *ptr);
 char *_strdup(char *ptr);
 size_t _strlen(char *ptr);
