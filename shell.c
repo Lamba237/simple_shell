@@ -22,6 +22,7 @@ int main(void)
 		nread = getline(&lineptr, &size, stdin);
 		if (nread == -1)
 		{
+			perror("./shell");
 			exit(0);
 		}
 		if (lineptr[nread - 1] == '\n')
