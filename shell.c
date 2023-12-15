@@ -8,6 +8,7 @@
  */
 int main(void)
 {
+	int res;
 	int (*builtin_func)(const char *, int) = NULL;
 	char *path;
 	pid_t pid;
@@ -48,8 +49,17 @@ int main(void)
 		{
 			builtin_func = exit_built;
 		}
-		builtin_func(args[0], i);
-		/* >> end of built in */
+		if (builtin_func)
+		{
+			res = builtin_func(args[0], i);
+			if (res)
+			{
+				perror("invalid argumente");
+			}
+			free(args);
+			free(lineptr);
+			exit(res);
+		}
 
 		path = get_file_path(args[0]);
 
